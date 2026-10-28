@@ -1,0 +1,23 @@
+name: Check Sine package
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check-sine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Test packaging
+        run: python -m unittest discover -s tests
+      - name: Verify committed Sine files
+        run: python scripts/build-sine.py --check

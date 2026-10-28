@@ -1,6 +1,13 @@
 {
+  "id": "firefox-minimal-compact-css",
+  "name": "Firefox Minimal Compact",
+  "description": "A compact, rounded Firefox theme with iconized menus and Sidebery integration.",
+  "author": "D3SOX",
+  "version": "1.0.0",
   "style": {
-    "chrome": "https://raw.githubusercontent.com/D3SOX/firefox-minimal-compact-css/master/userChrome.css",
-    "content": "https://raw.githubusercontent.com/D3SOX/firefox-minimal-compact-css/master/userContent.css"
-  }
+    "chrome": "sine/userChrome.css",
+    "content": "sine/userContent.css"
+  },
+  "tags": ["chrome", "content", "minimal"],
+  "fork": ["firefox"]
 }

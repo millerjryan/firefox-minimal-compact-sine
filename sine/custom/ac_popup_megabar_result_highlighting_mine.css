@@ -1,0 +1,61 @@
+/* Firefox userChrome.css tweaks ********************************************************/
+/* Github: https://github.com/aris-t2/customcssforfx ************************************/
+/****************************************************************************************/
+/* Based on 802b83ceb1251a4d44b7b57c663fac4b4d35398f */
+
+#PopupSearchAutoComplete :is(richlistitem,button):is(:hover,[selected]),   /* apply code to search popup too */
+.urlbarView button:is(:hover,:hover:active,[selected]),
+.urlbarView-row[row-selectable]:not([selected]):hover,
+.urlbarView-row[selected] {
+  color: inherit !important;
+  background-color: transparent !important;
+  /* Edge gradients with zero-width stops can leave gray lines on fractional pixels. */
+  background-image: linear-gradient(to bottom, rgba(247,163,247,0.1), rgba(246,122,246,0.1)) !important;
+  border-radius: 6px !important;
+  outline: 1px solid rgba(206,124,206,0.4) !important;
+  outline-radius: 0px !important;
+  outline-offset: -3px !important;
+}
+
+#PopupSearchAutoComplete :is(richlistitem, button):is(:hover, [selected]) {
+  outline-offset: -1px !important;
+}
+
+.urlbarView button:is(:hover, :hover:active, [selected]) {
+  outline-offset: 0px !important;
+}
+
+#urlbar-results .urlbarView-row[selected] .urlbarView-title,
+#urlbarView-results .urlbarView-title[selected],
+#urlbar-results .urlbarView-row[selected] .urlbarView-url,
+#urlbarView-results .urlbarView-url[selected],
+#urlbar-results .urlbarView-row[selected] .urlbarView-action,
+#urlbarView-results .urlbarView-action[selected],
+#urlbar-results .urlbarView-row[selected] .ac-separator,
+#urlbarView-results .ac-separator[selected] {
+  color: HighlightText !important;
+}
+
+/* Hide suggestion badges and restore the full favicon */
+#urlbar-results .urlbarView-type-icon {
+  display: none !important;
+}
+
+#urlbar-results .urlbarView-favicon {
+  mask-image: none !important;
+}
+
+/* Keep the favicon beside the text; title/URL wrapping belongs inside the body */
+#urlbar-results .urlbarView-row-inner {
+  flex-wrap: nowrap !important;
+}
+
+/* Keep titles and URLs separated in Firefox's current suggestion layout */
+#urlbar-results .urlbarView-row-body-top {
+  column-gap: 0.75em !important;
+}
+
+/* Let action pills fit inside compact rows without clipping their borders */
+#urlbar-results :is(.urlbarView-action, .urlbarView-switchToTab-accessory) {
+  margin-block: 0 !important;
+}

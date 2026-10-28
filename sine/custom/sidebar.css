@@ -1,0 +1,139 @@
+/* Keep splitter completely invisible when not in use */
+#sidebar-splitter {
+  min-width: 1px !important;
+  width: 1px !important;
+  background-color: transparent !important;
+  border: none !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+  position: relative !important;
+}
+
+/* Create invisible hover trigger positioned at the splitter */
+#sidebar-splitter::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 3px;
+  height: 100%;
+  z-index: 5;
+  background-color: transparent;
+}
+
+/* Create overlay on sidebar when hovering splitter */
+#sidebar-box {
+  position: relative;
+  /* Firefox adds inline padding when its launcher is hidden */
+  padding-inline: 0 !important;
+}
+
+/* Overlay always exists but starts invisible */
+#sidebar-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 5px;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.8) !important;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Show overlay with fade-in when hovering splitter */
+#sidebar-box:has(~ #sidebar-splitter:hover)::after,
+#sidebar-splitter:hover ~ #sidebar-box::after,
+#main-window:has(#sidebar-splitter:hover) #sidebar-box::after {
+  opacity: 0.6;
+}
+
+/* Smooth the edge by adding a subtle shadow */
+#sidebar-box {
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Remove sharp edges */
+#sidebar-box,
+#sidebar,
+#sidebar-header {
+  border-right: none !important;
+}
+
+/* Hide the legacy sidebar header and Firefox 157+ extension panel header */
+#sidebar-header,
+#sidebar-panel-header {
+  display: none !important;
+}
+
+/* Sidebery replaces the native sidebar launcher in horizontal tab mode */
+@media not -moz-pref("sidebar.verticalTabs") {
+  #sidebar-container,
+  #sidebar-launcher-splitter {
+    display: none !important;
+  }
+}
+
+/* Also hide sidebar when there's only one tab open (use together with chrome/hide_tabs_with_one_tab.css) */
+/* Don't hide sidebar when there's a pinned tab */
+#main-window:has(.tabbrowser-tab:only-of-type):not(:has(.tabbrowser-tab[pinned])) #sidebar-box,
+#main-window:has(.tabbrowser-tab[first-visible-tab="true"][last-visible-tab="true"]):not(:has(.tabbrowser-tab[pinned])) #sidebar-box,
+#main-window:has(.tabbrowser-tab:only-of-type):not(:has(.tabbrowser-tab[pinned])) #sidebar-splitter,
+#main-window:has(.tabbrowser-tab[first-visible-tab="true"][last-visible-tab="true"]):not(:has(.tabbrowser-tab[pinned])) #sidebar-splitter {
+  visibility: collapse !important;
+}
+
+/* Change Sidebery icon when there's only one tab */
+/* Don't change icon when there's a pinned tab */
+#main-window:has(.tabbrowser-tab:only-of-type):not(:has(.tabbrowser-tab[pinned])) :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-icon,
+#main-window:has(.tabbrowser-tab[first-visible-tab="true"][last-visible-tab="true"]):not(:has(.tabbrowser-tab[pinned])) :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-icon {
+  list-style-image: url(../icons/window.svg) !important;
+}
+
+/* Set up tab counter for Sidebery icon */
+#main-window {
+  counter-reset: sidebery-tab-counter;
+  /* Opaque badge colors: Firefox toolbarbutton-* vars are now ~30% transparent color-mix */
+  --sidebery-tab-badge-bg: var(--toolbar-field-focus-background-color, light-dark(rgb(220, 220, 224), rgb(66, 65, 77)));
+  --sidebery-tab-badge-fg: var(--toolbar-field-color, light-dark(rgb(12, 12, 13), rgb(249, 249, 250)));
+  --sidebery-tab-badge-border: light-dark(rgba(12, 12, 13, 0.15), rgba(249, 249, 250, 0.2));
+}
+
+.tabbrowser-tab:not([hidden]) {
+  counter-increment: sidebery-tab-counter;
+}
+
+:is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack {
+  position: relative;
+}
+
+/* Tab count badge for Sidebery when multiple tabs are open */
+#main-window:not(:has(.tabbrowser-tab:only-of-type)):not(:has(.tabbrowser-tab[first-visible-tab="true"][last-visible-tab="true"])) #sidebar-box:not([hidden]) ~ * :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack::after,
+#main-window:has(.tabbrowser-tab[pinned]) #sidebar-box:not([hidden]) ~ * :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack::after,
+#main-window:not(:has(.tabbrowser-tab:only-of-type)):not(:has(.tabbrowser-tab[first-visible-tab="true"][last-visible-tab="true"])) #sidebar-box[hidden] ~ * :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack::after,
+#main-window:not(:has(.tabbrowser-tab:only-of-type)):not(:has(.tabbrowser-tab[first-visible-tab="true"][last-visible-tab="true"])) :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack::after,
+#main-window:has(.tabbrowser-tab[pinned]) #sidebar-box[hidden] ~ * :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack::after,
+#main-window:has(.tabbrowser-tab[pinned]) :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="{3c078156-979c-498b-8990-85f7987dd929}"] .toolbarbutton-badge-stack::after {
+  content: counter(sidebery-tab-counter);
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 14px;
+  height: 14px;
+  padding-inline: 2px;
+  border-radius: 7px;
+  background-color: var(--sidebery-tab-badge-bg) !important;
+  color: var(--sidebery-tab-badge-fg);
+  font-size: 9px;
+  line-height: 14px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid var(--sidebery-tab-badge-border);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}

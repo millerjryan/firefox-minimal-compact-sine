@@ -316,6 +316,9 @@ emit_mine_updates_pr() {
 } > "$PR_BODY_FILE"
 
 # Stage submodule changes and any updated mine CSS files
+git submodule update --init --recursive
+python3 scripts/build-sine.py
+git add sine
 git add .gitmodules || true
 git add custom/*.css 2>/dev/null || true
 git commit -F "$COMMIT_MSG_FILE"
@@ -323,4 +326,3 @@ git push -u origin "$BRANCH"
 
 # Persist and print only the branch name for the workflow step.
 printf '%s\n' "$BRANCH" > "$BRANCH_OUTPUT_FILE"
-

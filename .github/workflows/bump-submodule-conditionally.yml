@@ -29,7 +29,7 @@ jobs:
         run: |
           chmod +x scripts/bump-submodules-conditionally.sh
           chmod +x scripts/update-mine-css-from-submodules.sh
-          scripts/bump-submodules-conditionally.sh || true
+          scripts/bump-submodules-conditionally.sh
           BRANCH=$(cat .tmp_branch_name 2>/dev/null || echo "")
           if [[ -n "$BRANCH" ]]; then
             echo "skip=false" >> $GITHUB_OUTPUT
@@ -60,5 +60,4 @@ jobs:
             --base "$BASE_BRANCH" \
             --title "chore: bump submodules conditionally" \
             --body-file .tmp_pr_body.md || true
-
 
